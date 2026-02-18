@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Soal Pertama</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #4D83AA;
+            font-family: "Comic Sans MS", cursive;
+        }
+
+        .container {
+            width: 800px;
+            margin: 10px auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: #E2D800;
+            color: #032152;
+            text-align: center;
+            padding: 6px;
+            font-size: 22px;
+            font-weight: bold;
+            border-top: 4px dotted #4D83AA;
+        }
+
+        .main {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 300px;
+            padding: 15px 20px;
+            border-right: 2px dotted #032152;
+        }
+
+        .sidebar h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #032152;
+            border-bottom: 2px dotted #032152;
+            padding-bottom: 4px;
+        }
+
+        .sidebar a {
+            display: block;
+            font-size: 13px;
+            color: #032152;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+
+        .search {
+            margin-top: 15px;
+        }
+
+        .search input {
+            width: 150px;
+            padding: 3px;
+            font-size: 12px;
+        }
+
+        .search button {
+            padding: 3px 8px;
+            font-size: 12px;
+        }
+
+        .content {
+            width: 500px;
+            padding: 10px 20px;
+        }
+
+        .content h2 {
+            margin: 2px 0 8px;
+            color: #032152;
+            font-weight: normal;
+        }
+
+        /* TABEL DIPERSISKAN */
+        .table-box {
+            width: 280px;
+            background: #9CBCD0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 5px;
+            border-top: 6px solid #032152;
+            border-bottom: 4px solid #032152;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th {
+            padding: 6px;
+            color: #032152;
+        }
+
+        td {
+            padding: 5px;
+            text-align: center;
+            color: white;
+        }
+
+        .note {
+            background: white;
+            color: black;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .spacer {
+            height: 180px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header">Soal Pertama :)</div>
+
+        <div class="main">
+
+            <div class="sidebar">
+                <h3>Menu</h3>
+                <a href="#">Soal Pertama</a>
+                <a href="#">Soal Kedua</a>
+
+                <div class="search">
+                    <h3>Search</h3>
+                    <input type="text" placeholder="Search this web">
+                    <button>GO!</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <h2>Tabel Sesuatu</h2>
+
+                <div class="table-box">
+                    <table>
+                        <tr>
+                            <th>No</th>
+                            <th>Huruf</th>
+                            <th>Keterangan</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>A</td>
+                            <td>Pertama</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>B</td>
+                            <td>Kedua</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>C</td>
+                            <td>Ketiga</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="note">
+                                Data di atas adalah data fiktif
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="spacer"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
