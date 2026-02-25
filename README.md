@@ -1,23 +1,22 @@
+**Profil Mahasiswa**
 
-# 👤 Profil Mahasiswa
-
-*Nama**: Aqila Hasna Nabila Ginanjar  
-*NRP* : 162023031  
-*Jurusan* : Sistem Informasi  
+Nama : Aqila Hasna Nabila Ginanjar  
+NRP : 162023031  
+Jurusan : Sistem Informasi  
 
 ---
 
-# Deskripsi Repository
+**Deskripsi Repository**
 
-Repository ini digunakan untuk menyimpan dan mengelola seluruh tugas mata kuliah **Sistem Informasi Web**.  
+Repository ini digunakan untuk menyimpan dan mengelola seluruh tugas mata kuliah Sistem Informasi Web.  
 Setiap folder merepresentasikan minggu/pertemuan perkuliahan yang berisi implementasi materi yang telah dipelajari.
 
 ---
 
-## Struktur Tugas
+**Struktur Tugas**
 
-#  *Week 2*
-Folder ini berisi tugas dasar HTML.  
+**[Week 2](./week2)**  
+Folder ini berisi tugas dasar HTML.
 
-#  *Week 3*
-Folder ini berisi tugas interaksi menggunakan JavaScript. (QUIZ DI KELAS) 
+**[Week 3](./week3)**  
+Folder ini berisi tugas interaksi menggunakan JavaScript (Quiz di Kelas).
