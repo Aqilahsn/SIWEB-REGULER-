@@ -1,7 +1,3 @@
-# 📚 SIWEB REGULER  
-Repository Tugas Sistem Informasi Web
-
----
 
 ## 👤 Profil Mahasiswa
 
