@@ -20,4 +20,4 @@ Setiap folder merepresentasikan minggu/pertemuan perkuliahan yang berisi impleme
 Folder ini berisi tugas dasar HTML.  
 
 ###  **Week 3**
-Folder ini berisi tugas interaksi menggunakan JavaScript.  
+Folder ini berisi tugas interaksi menggunakan JavaScript. (QUIZ DI KELAS) 
