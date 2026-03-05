@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Informasi Sederhana</title>
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; font-size: 12px; min-height: 100vh; }
+
+.bg-pattern {
+  min-height: 100vh;
+  background-image: url('assets/logo.png');
+  background-repeat: repeat;
+  background-size: 80px 80px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+
+.main-wrapper {
+  width: 580px;
+  border: 3px solid #8b0000;
+  display: flex;
+  flex-direction: column;
+  background-color: #e8950a;
+  position: relative;
+}
+
+/* HEADER */
+.header { display: flex; flex-direction: column; }
+.header-row { display: flex; height: 85px; }
+.header-row img { flex:1; width:0; object-fit:cover; border-right:1px solid #555; border-bottom:1px solid #555; }
+.header-row img:last-child { border-right: none; }
+
+/* LAYOUT */
+.main-layout { display: flex; flex: 1; }
+
+/* SIDEBAR */
+.sidebar { width: 110px; background-color: #e8950a; flex-shrink: 0; border-right: 1px solid rgba(0,0,0,0.2); }
+.nav-item {
+  padding: 8px 10px; font-size: 12px; font-weight: bold;
+  color: #5a2d00; cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  user-select: none; text-align: center;
+}
+.nav-item:hover { background-color: rgba(0,0,0,0.1); }
+.nav-item.active { color: #fff; background-color: rgba(0,0,0,0.25); }
+
+/* CONTENT */
+.content { flex: 1; background-color: #e8950a; padding: 12px; min-height: 200px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* HOME */
+.home-row { display: flex; align-items: center; gap: 8px; }
+.home-label { font-size: 12px; color: #000; }
+.btn-shout { background:#1a1a2e; color:#fff; border:none; padding:4px 14px; font-size:12px; font-weight:bold; cursor:pointer; }
+.btn-shout:hover { background:#333; }
+
+/* MENU TABLE */
+table { border-collapse: collapse; font-size: 11px; width: 100%; }
+th, td { border:1px solid #000; padding:4px 7px; color:#000; white-space:nowrap; background-color:#fff; }
+thead th { background-color:#e8950a; font-weight:bold; color:#000; }
+thead th:last-child { background-color:#e8950a; border:none; }
+tbody td:last-child:empty { background-color:#e8950a; border:none; }
+tfoot td { background-color:#fff; }
+.label-right { text-align:right; background-color:#e8950a; }
+.qty { width:55px; padding:2px 4px; font-size:11px; border:1px solid #000; background-color:#fff; }
+
+.btn-action { background:#1a1a1a; color:#fff; border:none; padding:3px 10px; font-size:11px; font-weight:bold; cursor:pointer; }
+.btn-action:hover { background:#444; }
+
+/* CALCULATOR */
+.calc-row { display:flex; align-items:center; gap:4px; margin-bottom:8px; flex-wrap:wrap; }
+.calc-input { width:65px; padding:3px 5px; font-size:12px; border:1px solid #000; background:#fff; text-align:center; }
+.calc-op { width:45px; padding:3px; font-size:12px; border:1px solid #000; background:#fff; }
+.calc-eq { font-size:13px; font-weight:bold; color:#000; }
+.calc-result { width:65px; padding:3px 5px; font-size:12px; border:1px solid #000; background:#fff; text-align:center; }
+.calc-actions { display:flex; gap:6px; }
+
+/* ======= GARIS HIDUP ======= */
+.gh-title { font-size:15px; font-weight:bold; margin-bottom:8px; color:#000; }
+.gh-desc { font-size:11px; color:#000; margin-bottom:10px; line-height:1.6; }
+.gh-sub { font-size:13px; font-weight:bold; margin-bottom:8px; color:#000; }
+hr.gh-line { border:none; border-top:1px solid #333; margin:8px 0; }
+
+.gh-form-row { display:flex; align-items:center; margin-bottom:12px; }
+.gh-form-row label { width:185px; font-size:11px; color:#000; }
+.gh-select { padding:2px 5px; font-size:11px; border:1px solid #888; background:#fff; }
+
+.gh-btns { display:flex; gap:4px; margin-bottom:10px; }
+.btn-kirim, .btn-reset-gh {
+  background:#d4d0c8; color:#000; border:1px solid #888;
+  padding:2px 10px; font-size:11px; cursor:pointer;
+}
+.btn-kirim:hover, .btn-reset-gh:hover { background:#bbb; }
+
+.gh-output-label { font-size:13px; font-weight:bold; margin-bottom:6px; color:#000; }
+
+.gh-output-grid { display:grid; grid-template-columns: 80px 10px 130px; row-gap:2px; margin-bottom:10px; font-size:11px; }
+.gh-output-grid span { color:#000; padding:1px 0; }
+.gh-out-val { border:1px solid #999; background:#fff; padding:2px 5px; font-size:11px; }
+
+.gh-result { display:none; margin-top:8px; }
+.gh-result-title { font-size:13px; font-weight:bold; color:#000; margin-bottom:6px; }
+.gh-result-text { font-size:11px; color:#000; line-height:1.7; }
+.gh-result-text p { margin-bottom:8px; }
+
+/* FOOTER */
+.footer { background:#e8950a; text-align:center; padding:6px; font-size:11px; font-weight:bold; color:#000; border-top:1px solid #000; line-height:1.5; }
+
+/* MODAL */
+.modal-overlay { display:none; position:absolute; inset:0; background:transparent; z-index:999; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal-box { background:#3c3c3c; border-radius:4px; padding:14px 18px 16px; width:310px; box-shadow:2px 2px 10px rgba(0,0,0,0.6); animation:popIn 0.15s ease; }
+@keyframes popIn { from{transform:scale(0.88);opacity:0} to{transform:scale(1);opacity:1} }
+.modal-header { display:flex; align-items:center; gap:6px; margin-bottom:10px; padding-bottom:5px; border-bottom:1px solid #555; }
+.modal-src { font-size:11px; color:#aaa; }
+.modal-msg { font-size:13px; color:#e0e0e0; margin-bottom:14px; line-height:1.6; }
+.modal-footer-btn { display:flex; justify-content:flex-end; }
+.btn-ok { background:#0078d4; color:#fff; border:none; padding:4px 20px; font-size:13px; font-weight:bold; cursor:pointer; border-radius:3px; }
+.btn-ok:hover { background:#005fa3; }
+  </style>
+</head>
+<body>
+<div class="bg-pattern">
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-row">
+        <img src="assets/itenas.png" alt="itenas">
+        <img src="assets/itenas.png" alt="itenas">
+        <img src="assets/itenas.png" alt="itenas">
+      </div>
+      <div class="header-row">
+        <img src="assets/itenas.png" alt="itenas">
+        <img src="assets/itenas.png" alt="itenas">
+        <img src="assets/itenas.png" alt="itenas">
+      </div>
+    </div>
+
+    <!-- LAYOUT -->
+    <div class="main-layout">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="nav-item active" onclick="showPage('home')">Home</div>
+        <div class="nav-item" onclick="handleMenuClick()">Menu</div>
+        <div class="nav-item" onclick="showPage('calc')">Calculator</div>
+        <div class="nav-item" onclick="showPage('gh')">Garis Hidup</div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+
+        <!-- HOME -->
+        <div id="page-home" class="page active">
+          <div class="home-row">
+            <span class="home-label">klik button disampling &gt;&gt;</span>
+            <button class="btn-shout" onclick="handleShout()">Shout</button>
+          </div>
+        </div>
+
+        <!-- MENU -->
+        <div id="page-menu" class="page">
+          <table>
+            <thead>
+              <tr><th>No</th><th>Makanan/Minuman</th><th>Harga</th><th>Pesan</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td><td>Bakso Istimewa</td><td>@ Rp 12000</td>
+                <td><input class="qty" type="number" id="qty1" value="0" min="0" oninput="hitungTotal()"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>2</td><td>Soto Spesial</td><td>@ Rp 10000</td>
+                <td><input class="qty" type="number" id="qty2" value="0" min="0" oninput="hitungTotal()"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>3</td><td>Mie Ayam Super</td><td>@ Rp 15000</td>
+                <td><input class="qty" type="number" id="qty3" value="0" min="0" oninput="hitungTotal()"></td>
+                <td><button class="btn-action" onclick="resetMenu()">Reset</button></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr><td colspan="3" class="label-right">Jumlah Total</td><td id="jumlah-total" colspan="2">0</td></tr>
+              <tr><td colspan="3" class="label-right">Diskon</td><td id="diskon-val" colspan="2">0</td></tr>
+              <tr><td colspan="3" class="label-right"><strong>Jumlah Bayar</strong></td><td id="jumlah-bayar" colspan="2"><strong>0</strong></td></tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- CALCULATOR -->
+        <div id="page-calc" class="page">
+          <div class="calc-row">
+            <input class="calc-input" type="number" id="num1" value="">
+            <select class="calc-op" id="operator">
+              <option value="*">x</option>
+              <option value="/">÷</option>
+              <option value="+">+</option>
+              <option value="-">-</option>
+            </select>
+            <input class="calc-input" type="number" id="num2" value="">
+            <span class="calc-eq">=</span>
+            <input class="calc-result" type="text" id="calc-result" readonly>
+          </div>
+          <div class="calc-actions">
+            <button class="btn-action" onclick="hitung()">Hitung</button>
+            <button class="btn-action" onclick="resetCalc()">Reset</button>
+          </div>
+        </div>
+
+        <!-- GARIS HIDUP -->
+        <div id="page-gh" class="page">
+          <div class="gh-title">Program Garis Hidup Tanggal Lahir</div>
+          <div class="gh-desc">
+            Program ini merupakan program untuk mendeskripsikan karakter anda berdasarkan tanggal lahir yang kemudian hasilnya akan dikategorikan sebagai Garis Lahir 1 sampai 9.
+            <br><br>
+            Angka-angka dalam tanggal lahir Anda menyimpan banyak makna. Jumlahkan sampai menjadi satu angka, lalu lihat artinya? (misalnya Anda lahir tanggal 25 desember 1998, 25 + 12 + 1998 = 2 + 5 + 1 + 2 + 1 + 9 + 9 + 8 = 36 = 3 + 6 = 9)
+          </div>
+          <hr class="gh-line">
+          <div class="gh-sub">Ayo Cari Tahu Kepribadian Kamu !</div>
+          <hr class="gh-line">
+
+          <div class="gh-form-row">
+            <label>Masukkan Tanggal Lahir Anda</label>
+            <select class="gh-select" id="gh-tgl"></select>
+          </div>
+          <div class="gh-form-row">
+            <label>Masukkan Bulan Lahir Anda</label>
+            <select class="gh-select" id="gh-bln">
+              <option value="1">Januari</option><option value="2">Februari</option>
+              <option value="3">Maret</option><option value="4">April</option>
+              <option value="5">Mei</option><option value="6">Juni</option>
+              <option value="7">Juli</option><option value="8">Agustus</option>
+              <option value="9">September</option><option value="10">Oktober</option>
+              <option value="11">November</option><option value="12">Desember</option>
+            </select>
+          </div>
+          <div class="gh-form-row">
+            <label>Masukkan Tahun Lahir Anda</label>
+            <select class="gh-select" id="gh-thn"></select>
+          </div>
+
+          <div class="gh-btns">
+            <button class="btn-kirim" onclick="hitungGH()">kirim</button>
+            <button class="btn-reset-gh" onclick="resetGH()">reset</button>
+          </div>
+          <hr class="gh-line">
+
+          <div class="gh-output-label">Output</div>
+          <div class="gh-output-grid">
+            <span>Tanggal</span><span>:</span><input type="text" id="o-tgl" class="gh-out-val" readonly>
+            <span>Bulan</span><span>:</span><input type="text" id="o-bln" class="gh-out-val" readonly>
+            <span>Tahun</span><span>:</span><input type="text" id="o-thn" class="gh-out-val" readonly>
+            <span>Hasil 1</span><span>:</span><input type="text" id="o-h1" class="gh-out-val" readonly>
+            <span>Hasil 2</span><span>:</span><input type="text" id="o-h2" class="gh-out-val" readonly>
+            <span>Hasil Akhir</span><span>:</span><input type="text" id="o-ha" class="gh-out-val" readonly>
+          </div>
+
+          <div class="gh-result" id="gh-result">
+            <hr class="gh-line">
+            <div class="gh-result-title" id="gh-result-title"></div>
+            <div class="gh-result-text" id="gh-result-text"></div>
+          </div>
+        </div>
+
+      </div><!-- end content -->
+    </div><!-- end main-layout -->
+
+    <!-- FOOTER -->
+    <div class="footer">280224<br>Sistem Informasi | ITENAS 2024</div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span>🌐</span>
+          <span class="modal-src">file://</span>
+        </div>
+        <div class="modal-msg" id="modal-msg"></div>
+        <div class="modal-footer-btn">
+          <button class="btn-ok" onclick="closeModal()">OK</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main-wrapper -->
+</div><!-- end bg-pattern -->
+
+<script>
+// =========================================
+// DESKRIPSI GARIS HIDUP 1-9
+// =========================================
+var ghData = {
+  1: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 1",
+    teks: [
+      "Orang dengan Garis Hidup 1 adalah pemimpin sejati yang penuh ambisi dan kemandirian. Mereka memiliki tekad kuat untuk menjadi yang terdepan dan sering menjadi pelopor dalam hal-hal yang mereka geluti. Kreativitas tinggi dan inovasi adalah kekuatan utama mereka dalam menjalani kehidupan.",
+      "Mereka sangat mandiri dan tidak suka bergantung pada orang lain. Terkadang bisa keras kepala, namun semangat juang mereka sangat kuat dan tidak mudah menyerah. Mereka sangat cocok untuk menjadi pengusaha, pemimpin organisasi, atau bekerja secara independen tanpa banyak tekanan dari luar.",
+      "Sisi positif dari garis hidup ini adalah kemampuan untuk mengambil inisiatif dan motivasi diri yang tinggi. Namun perlu waspada terhadap kecenderungan untuk menjadi terlalu egois atau tidak mau mendengar pendapat orang lain."
+    ]
+  },
+  2: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 2",
+    teks: [
+      "Orang dengan Garis Hidup 2 adalah diplomat sejati yang penuh empati dan sangat sensitif terhadap perasaan orang lain. Mereka memiliki kemampuan luar biasa untuk bekerja sama dengan orang lain dan selalu berusaha menciptakan suasana harmonis di mana pun mereka berada.",
+      "Mereka adalah pendengar yang sangat baik dan intuitif. Kemampuan mereka dalam memahami emosi orang lain menjadikan mereka sangat dicintai dalam lingkungan sosial maupun profesional. Mereka cenderung menghindari konflik dan lebih suka menyelesaikan masalah secara damai.",
+      "Cocok bekerja di bidang konseling, mediasi, musik, seni, atau pekerjaan yang membutuhkan kerja tim yang solid. Perlu hati-hati agar tidak terlalu bergantung pada penilaian orang lain dalam mengambil keputusan untuk diri sendiri."
+    ]
+  },
+  3: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 3",
+    teks: [
+      "Bagi mereka yang jumlah angka harinya 3, ekspresi, sosialisasi, dan kreativitas sebagai pelajaran yang harus ditempuh dalam hidupnya. Entertainer kelas dunia, orangorang berkilau dan artistik termotivasi di dalamnya. Orang-orang dengan garis hidup 3 yang telah mengasah bakatnya mempunyai bakat kreatif yang istimewa, biasanya dalam verbal, tulisan, akting, atau semacamnya.",
+      "Pembicara yang trampil dalam arti bukan hanya seseorang yang menyenangkan untuk didengar, tapi lebih penting lagi, seseorang yang mampu untuk mendengarkan. Mereka adalah individu-individu yang selalu diterima dengan baik dalam setiap situasi sosial, dan juga mengerti bagaimana membuat orang lain merasa diterima.",
+      "Anda tidak terlalu pandai menangani perihal keuangan karena tidak menganggap penting hal itu. Uang akan dibelanjakan saat Anda punya, dan tidak dikeluarkan saat Anda tidak ada uang. Kemampuan Anda seringkali optimistis dan jadi kehlangan fokus. Jaga agar tidak selalu mengkritik orang lain, ataupun tidak terlalu optimis. Sifat Anda yang ramah dan menyenangkan bisa membantu Anda untuk bisa melesap, apalagi jika Anda mampu memfokuskan energi dan talenta Anda pada minat yang tepat."
+    ]
+  },
+  4: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 4",
+    teks: [
+      "Orang dengan Garis Hidup 4 adalah pekerja keras yang sangat praktis, terorganisir, dan dapat diandalkan oleh siapa saja. Mereka membangun fondasi yang kuat dalam segala hal yang mereka kerjakan. Kejujuran, integritas, dan kerja keras adalah nilai-nilai utama yang mereka pegang teguh.",
+      "Mereka sangat sistematis dan suka pada keteraturan. Tidak jarang mereka menjadi tulang punggung dalam sebuah tim atau keluarga karena dedikasi dan keandalannya. Mereka sangat teliti dalam setiap pekerjaan dan tidak mudah puas dengan hasil yang setengah-setengah.",
+      "Cocok di bidang teknik, manajemen, akuntansi, arsitektur, atau konstruksi. Perlu belajar untuk lebih fleksibel menghadapi perubahan karena dunia tidak selalu berjalan sesuai rencana yang sudah disusun dengan rapi."
+    ]
+  },
+  5: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 5",
+    teks: [
+      "Orang dengan Garis Hidup 5 adalah jiwa yang bebas dan sangat mencintai petualangan. Mereka adalah orang-orang yang dinamis, penuh semangat, dan selalu ingin mencoba hal-hal baru. Perubahan bagi mereka bukanlah ancaman, melainkan peluang yang menyenangkan.",
+      "Mereka sangat adaptif dan bisa berkembang dalam situasi apa pun. Kemampuan komunikasi mereka sangat baik dan membuat mereka mudah bergaul dengan berbagai kalangan. Rasa ingin tahu yang tinggi mendorong mereka untuk terus belajar dan berkembang.",
+      "Cocok di bidang pariwisata, jurnalisme, penjualan, marketing, atau pekerjaan yang dinamis dan tidak monoton. Perlu belajar untuk lebih konsisten dan berkomitmen karena kecenderungan untuk mudah bosan bisa menjadi hambatan dalam mencapai tujuan jangka panjang."
+    ]
+  },
+  6: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 6",
+    teks: [
+      "Orang dengan Garis Hidup 6 adalah pengasuh sejati yang penuh kasih sayang dan rasa tanggung jawab yang tinggi. Mereka sangat peduli terhadap keluarga, teman, dan komunitas sekitar. Mereka selalu berusaha menciptakan keharmonisan dan keindahan di setiap aspek kehidupan.",
+      "Mereka memiliki rasa estetika yang tinggi dan sering tertarik pada hal-hal yang berhubungan dengan keindahan, seni, dan kebudayaan. Kemampuan mereka dalam merawat dan mendukung orang lain sangat luar biasa dan membuat mereka menjadi sosok yang sangat dihargai.",
+      "Cocok di bidang kesehatan, pendidikan, konseling, desain, atau seni. Perlu berhati-hati agar tidak terlalu perfeksionis atau terlalu mengambil alih tanggung jawab orang lain yang bisa berujung pada kelelahan dan rasa kecewa."
+    ]
+  },
+  7: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 7",
+    teks: [
+      "Orang dengan Garis Hidup 7 adalah pencari kebenaran sejati yang analitis, introspektif, dan sangat mendalam dalam berpikir. Mereka memiliki pikiran yang tajam dan selalu berusaha untuk menggali pengetahuan yang lebih dalam dari apa yang tampak di permukaan.",
+      "Mereka sangat intuitif dan sering memiliki pandangan atau wawasan yang jauh melampaui orang-orang di sekitar mereka. Kesunyian dan ketenangan adalah teman terbaik mereka untuk berpikir dan bermeditasi. Mereka menyukai penelitian mendalam dan analisis yang cermat.",
+      "Cocok di bidang penelitian, filsafat, ilmu pengetahuan, teknologi, atau spiritualitas. Perlu belajar untuk lebih terbuka terhadap orang lain dan tidak terlalu tertutup, karena kebijaksanaan yang mereka miliki sangat berharga untuk dibagikan kepada dunia."
+    ]
+  },
+  8: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 8",
+    teks: [
+      "Orang dengan Garis Hidup 8 adalah jiwa yang sangat ambisius dan berorientasi pada pencapaian besar dalam kehidupan material maupun spiritual. Mereka memiliki bakat alami dalam bisnis, keuangan, dan kepemimpinan. Kemampuan mereka dalam membaca situasi dan peluang sangat tajam.",
+      "Mereka adalah pemimpin yang kuat, tegas, dan mampu membuat keputusan besar dengan percaya diri. Daya juang mereka sangat tinggi dan tidak mudah menyerah ketika menghadapi rintangan. Mereka tahu bagaimana cara mengelola sumber daya dengan efektif dan efisien.",
+      "Cocok di bidang bisnis, keuangan, hukum, investasi, atau manajemen eksekutif. Perlu belajar untuk menyeimbangkan antara ambisi karier dengan kehidupan pribadi dan hubungan dengan orang-orang yang mereka cintai agar hidup terasa lebih bermakna."
+    ]
+  },
+  9: {
+    judul: "Tanggal Lahir Anda Berada Pada Garis Hidup 9",
+    teks: [
+      "Orang dengan Garis Hidup 9 adalah jiwa yang humanis, penuh belas kasih, dan memiliki rasa empati yang sangat dalam terhadap sesama manusia. Mereka sering terpanggil untuk melayani kemanusiaan dan memberikan dampak positif bagi masyarakat luas. Mereka adalah idealis sejati yang percaya dunia bisa menjadi lebih baik.",
+      "Mereka memiliki wawasan yang luas dan pemahaman yang mendalam tentang kehidupan. Pengalaman hidup yang beragam menjadikan mereka sosok yang bijaksana dan mampu memberikan nasihat yang berharga. Mereka sangat kreatif dan memiliki jiwa seni yang tinggi.",
+      "Cocok di bidang sosial, seni, pendidikan, kemanusiaan, atau aktivisme. Perlu belajar untuk tidak terlalu idealis sehingga tidak mudah kecewa ketika realita tidak sesuai dengan harapan, dan belajar untuk merawat diri sendiri juga sama pentingnya dengan merawat orang lain."
+    ]
+  }
+};
+
+// =========================================
+// MODAL
+// =========================================
+var modalCb = null;
+function showModal(msg, cb) {
+  document.getElementById('modal-msg').textContent = msg;
+  document.getElementById('modal-overlay').classList.add('show');
+  modalCb = cb || null;
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+  if (modalCb) { var f = modalCb; modalCb = null; f(); }
+}
+
+// =========================================
+// NAVIGASI
+// =========================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  document.getElementById('page-' + id).classList.add('active');
+  var map = { home:0, menu:1, calc:2, gh:3 };
+  document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+}
+
+// =========================================
+// HOME
+// =========================================
+function handleShout() { showModal('Hai, Selamat datang di Sistem Sederhana'); }
+
+// =========================================
+// MENU
+// =========================================
+function handleMenuClick() {
+  showModal('Input Jumlah Pesanan agar di hitung otomatis oleh sistem', function() {
+    showPage('menu'); hitungTotal();
+  });
+}
+function hitungTotal() {
+  var h = [12000,10000,15000];
+  var q = [
+    parseInt(document.getElementById('qty1').value)||0,
+    parseInt(document.getElementById('qty2').value)||0,
+    parseInt(document.getElementById('qty3').value)||0
+  ];
+  var total = 0;
+  for(var i=0;i<3;i++) total += h[i]*q[i];
+  var diskon = total > 50000 ? Math.round(total*0.1) : 0;
+  var bayar = total - diskon;
+  document.getElementById('jumlah-total').textContent = total;
+  document.getElementById('diskon-val').textContent = diskon;
+  document.getElementById('jumlah-bayar').innerHTML = '<strong>'+bayar+'</strong>';
+}
+function resetMenu() {
+  document.getElementById('qty1').value=0;
+  document.getElementById('qty2').value=0;
+  document.getElementById('qty3').value=0;
+  hitungTotal();
+}
+
+// =========================================
+// CALCULATOR
+// =========================================
+function hitung() {
+  var n1 = document.getElementById('num1').value.trim();
+  var n2 = document.getElementById('num2').value.trim();
+  if(n1===''||n2===''){showModal('inputan pertama dan kedua harus lebih dari 0');return;}
+  var a=parseFloat(n1), b=parseFloat(n2);
+  var op=document.getElementById('operator').value;
+  if(isNaN(a)||isNaN(b)){showModal('inputan pertama dan kedua harus lebih dari 0');return;}
+  var r;
+  if(op==='+') r=a+b;
+  else if(op==='-') r=a-b;
+  else if(op==='*') r=a*b;
+  else if(op==='/'){if(b===0){showModal('Tidak bisa membagi dengan 0');return;}r=a/b;}
+  document.getElementById('calc-result').value = parseFloat(r.toFixed(6));
+}
+function resetCalc() {
+  document.getElementById('num1').value='';
+  document.getElementById('num2').value='';
+  document.getElementById('calc-result').value='';
+}
+
+// =========================================
+// GARIS HIDUP
+// =========================================
+function sumDigits(n) {
+  // Jumlahkan semua digit dari angka n
+  return String(n).split('').reduce(function(a,d){ return a + parseInt(d); }, 0);
+}
+
+function reduksi(n) {
+  // Kurangi terus sampai 1 digit (1-9)
+  while(n > 9) { n = sumDigits(n); }
+  return n;
+}
+
+function hitungGH() {
+  var tgl = parseInt(document.getElementById('gh-tgl').value);
+  var bln = parseInt(document.getElementById('gh-bln').value);
+  var thn = parseInt(document.getElementById('gh-thn').value);
+  var blnNama = document.getElementById('gh-bln').options[document.getElementById('gh-bln').selectedIndex].text;
+
+  // Jumlahkan semua digit: tanggal + bulan + tahun
+  var gabung = String(tgl) + String(bln) + String(thn);
+  var hasil1 = gabung.split('').reduce(function(a,d){ return a+parseInt(d); }, 0);
+
+  // Hasil 2: jumlahkan digit dari hasil1
+  var hasil2 = hasil1 > 9 ? sumDigits(hasil1) : hasil1;
+
+  // Hasil Akhir: reduksi sampai 1-9
+  var hasilAkhir = reduksi(hasil2);
+
+  // Tampilkan output
+  document.getElementById('o-tgl').value = tgl;
+  document.getElementById('o-bln').value = blnNama;
+  document.getElementById('o-thn').value = thn;
+  document.getElementById('o-h1').value  = hasil1;
+  document.getElementById('o-h2').value  = hasil2;
+  document.getElementById('o-ha').value  = hasilAkhir;
+
+  // Tampilkan deskripsi
+  var data = ghData[hasilAkhir];
+  if(data) {
+    document.getElementById('gh-result-title').textContent = data.judul;
+    var html = data.teks.map(function(p){ return '<p>'+p+'</p>'; }).join('');
+    document.getElementById('gh-result-text').innerHTML = html;
+    document.getElementById('gh-result').style.display = 'block';
+  }
+}
+
+function resetGH() {
+  document.getElementById('gh-tgl').value = 1;
+  document.getElementById('gh-bln').value = 1;
+  document.getElementById('gh-thn').selectedIndex = 0;
+  ['o-tgl','o-bln','o-thn','o-h1','o-h2','o-ha'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('gh-result').style.display = 'none';
+}
+
+// =========================================
+// INIT - isi dropdown
+// =========================================
+window.onload = function() {
+  // Tanggal 1-31
+  var selTgl = document.getElementById('gh-tgl');
+  for(var d=1; d<=31; d++) {
+    var o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    selTgl.appendChild(o);
+  }
+  // Tahun 1950-2010
+  var selThn = document.getElementById('gh-thn');
+  for(var y=1950; y<=2010; y++) {
+    var o2 = document.createElement('option');
+    o2.value = y; o2.textContent = y;
+    selThn.appendChild(o2);
+  }
+};
+</script>
+</body>
+</html>
