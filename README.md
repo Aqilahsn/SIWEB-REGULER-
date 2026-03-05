@@ -20,3 +20,8 @@ Folder ini berisi tugas dasar HTML.
 
 **[Week 3](./week3)**  
 Folder ini berisi tugas interaksi menggunakan JavaScript (Quiz di Kelas).
+
+**[Week 4](./week4)**  
+Folder ini berisi tugas week4 dengan evaluasi week4
+
+
